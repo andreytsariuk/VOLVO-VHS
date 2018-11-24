@@ -89,4 +89,5 @@ for x in range(1, len(sys.argv)):
     results.append(result[0])
 
 
-print(results)
+json.dumps(print(results))
+
