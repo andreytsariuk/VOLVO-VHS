@@ -101,7 +101,7 @@ def convert_mask(mask):
     for i in range(0, len(mask)):
         for j in range(0, len(mask[i])):
             indices = [k for k, x in enumerate(mask[i][j]) if x == bool(1)] 
-            if len(mask) > 0:
+            if len(indices) > 0:
                result.append({
                    "x": i,
                    "y": j,
