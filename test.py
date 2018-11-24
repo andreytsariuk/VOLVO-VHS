@@ -12,6 +12,7 @@ import skimage.io
 import matplotlib
 import matplotlib.pyplot as plt
 import json
+import codecs
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("./")
@@ -90,5 +91,17 @@ for x in range(1, len(sys.argv)):
     results.append(result[0])
 
 
-print(json.dumps(results))
+def convert_bitmap_to_array(param):
+    b = param.tolist() # nested lists with same data, indices
+    print(b)
+    return json.dumps(b)
+
+#print(json.dumps({
+#    "class_ids": results[0].get("class_ids").tolist(),
+#    "scores": convert_bitmap_to_array(results[0].get("scores")),
+#    "rois": convert_bitmap_to_array(results[0].get("rois")),
+#    "masks":results[0].get("masks").tolist(),
+#}))
+
+print(results[0])
 
