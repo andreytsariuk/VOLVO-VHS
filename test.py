@@ -11,6 +11,7 @@ import numpy as np
 import skimage.io
 import matplotlib
 import matplotlib.pyplot as plt
+import json
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("./")
