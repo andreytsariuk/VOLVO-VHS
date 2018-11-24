@@ -102,12 +102,13 @@ def convert_mask(mask):
         for j in range(0, len(mask[i])):
             indices = [k for k, x in enumerate(mask[i][j]) if x == bool(1)] 
             if len(mask) > 0:
-               print(i, j, indices)
                result.append({
                    "x": i,
                    "y": j,
                    "masks": indices
-               })   
+               })
+
+    return result              
 
 print(json.dumps({
    "class_ids": results[0].get("class_ids").tolist(),
