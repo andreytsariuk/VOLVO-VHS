@@ -13,13 +13,14 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Root directory of the project
-ROOT_DIR = os.path.abspath("../")
+ROOT_DIR = os.path.abspath("./")
+
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library
 # Import COCO config
 # To find local version
-sys.path.append(os.path.join(ROOT_DIR, "samples/coco/"))
+sys.path.append(os.path.join(ROOT_DIR, "./coco/"))
 
 # %matplotlib inline
 
@@ -33,7 +34,7 @@ if not os.path.exists(COCO_MODEL_PATH):
     utils.download_trained_weights(COCO_MODEL_PATH)
 
 # Directory of images to run detection on
-IMAGE_DIR = os.path.join(ROOT_DIR, "images")
+IMAGE_DIR = os.path.join(ROOT_DIR, "public/images")
 
 
 class InferenceConfig(coco.CocoConfig):
@@ -75,14 +76,21 @@ class_names = ['BG', 'person', 'bicycle', 'car', 'motorcycle', 'airplane',
 
 
 # Load a random image from the images folder
-file_names = next(os.walk(IMAGE_DIR))[2]
-image = skimage.io.imread(os.path.join(
-    IMAGE_DIR, 'webANXteletubbiesS2.jpg?quality=60'))
 
-# Run detection
-results = model.detect([image], verbose=1)
+results = []
 
-# Visualize results
-r = results[0]
-visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'],
-                            class_names, r['scores'])
+for x in range(1, len(sys.argv)):
+    print(sys.argv[x])
+    image = skimage.io.imread(os.path.join(
+        IMAGE_DIR, sys.argv[x]))
+    # Run detection
+    result = model.detect([image], verbose=1)
+    # Visualize results
+    results.append(result[0])
+
+
+ print(results)   
+
+
+# visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'],
+#                            class_names, r['scores'])
