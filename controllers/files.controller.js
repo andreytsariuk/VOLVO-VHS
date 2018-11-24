@@ -43,15 +43,20 @@ module.exports = class {
      */
     static recognize(req, res, next) {
         const image = '6vm29zxjovofxan.jpg'
-       
         return new Promise((resolve,reject)=>{
+       console.log(image)
+            
             let result ='';
-            const pythonProcess = spawn('python',["test.py", image]);
-            pythonProcess.stdout.on('data', (data) => {
+            const pythonProcess = spawn('python3',["test.py", image]);
+            pythonProcess.on('data', (data) => {
+                console.log('data',data)
                if(data.indexOf('finish')!==-1)
                    result = data;
             });
-            pythonProcess.on(exit,()=>resolve(result))
+            pythonProcess.on('exit',(exit)=>{
+               console.log(exit)
+               return resolve(result)
+            })
         })
         .then(result=>res.send(result))
         .catch(err=>res.send(err));
