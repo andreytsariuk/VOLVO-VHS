@@ -1,4 +1,8 @@
 #!/usr/bin/python
+import coco
+from mrcnn import visualize
+import mrcnn.model as modellib
+from mrcnn import utils
 import os
 import sys
 import random
@@ -13,20 +17,17 @@ ROOT_DIR = os.path.abspath("../")
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library
-from mrcnn import utils
-import mrcnn.model as modellib
-from mrcnn import visualize
 # Import COCO config
-sys.path.append(os.path.join(ROOT_DIR, "samples/coco/"))  # To find local version
-import coco
+# To find local version
+sys.path.append(os.path.join(ROOT_DIR, "samples/coco/"))
 
-#%matplotlib inline 
+# %matplotlib inline
 
 # Directory to save logs and trained model
 MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 
 # Local path to trained weights file
-COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
+COCO_MODEL_PATH = os.path.join(ROOT_DIR, "h5-models/main.h5")
 # Download COCO trained weights from Releases if needed
 if not os.path.exists(COCO_MODEL_PATH):
     utils.download_trained_weights(COCO_MODEL_PATH)
@@ -40,6 +41,7 @@ class InferenceConfig(coco.CocoConfig):
     # one image at a time. Batch size = GPU_COUNT * IMAGES_PER_GPU
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
+
 
 config = InferenceConfig()
 config.display()
@@ -74,12 +76,13 @@ class_names = ['BG', 'person', 'bicycle', 'car', 'motorcycle', 'airplane',
 
 # Load a random image from the images folder
 file_names = next(os.walk(IMAGE_DIR))[2]
-image = skimage.io.imread(os.path.join(IMAGE_DIR, 'webANXteletubbiesS2.jpg?quality=60'))
+image = skimage.io.imread(os.path.join(
+    IMAGE_DIR, 'webANXteletubbiesS2.jpg?quality=60'))
 
 # Run detection
 results = model.detect([image], verbose=1)
 
 # Visualize results
 r = results[0]
-visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'], 
+visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'],
                             class_names, r['scores'])
