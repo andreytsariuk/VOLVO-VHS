@@ -30,4 +30,15 @@ module.exports = class {
         });
     }
 
+
+    /**
+     * 
+     * @param {express().request} req 
+     * @param {express().response} res 
+     * @param {function} next 
+     */
+    recognize(req, res, next) {
+
+    }
+
 }
