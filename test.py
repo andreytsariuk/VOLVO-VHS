@@ -97,9 +97,9 @@ def convert_bitmap_to_array(param):
     return json.dumps(b)
 
 def convert_mask(mask):
-    for i in mask:
-        for j in mask[i]:
-            indices = [k for k, x in enumerate(mask[i][j]) if x == "true"] 
+    for mask_i in mask:
+        for mask_j in mask[i]:
+            indices = [k for k, x in enumerate(mask_j) if x == "true"] 
             print(indices)   
 
 #print(json.dumps({
