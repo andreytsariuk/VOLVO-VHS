@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import coco
 from mrcnn import visualize
 import mrcnn.model as modellib
 from mrcnn import utils
@@ -20,7 +21,6 @@ sys.path.append(ROOT_DIR)  # To find local version of the library
 # Import COCO config
 # To find local version
 sys.path.append(os.path.join(ROOT_DIR, "coco/"))
-import coco
 # %matplotlib inline
 
 # Directory to save logs and trained model
@@ -88,8 +88,4 @@ for x in range(1, len(sys.argv)):
     results.append(result[0])
 
 
-print(', '.join(results))
-
-
-# visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'],
-#                            class_names, r['scores'])
+print(results)
