@@ -100,7 +100,8 @@ def convert_mask(mask):
     for i in range(0, len(mask)):
         for j in range(0, len(mask[i])):
             indices = [k for k, x in enumerate(mask[i][j]) if x == bool(1)] 
-            print(i, j, indices)   
+            if len(mask) > 0:
+               print(i, j, indices)   
 
 #print(json.dumps({
 #    "class_ids": results[0].get("class_ids").tolist(),
