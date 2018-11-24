@@ -25,7 +25,8 @@ module.exports = class {
             return res.status(400).send('Verify you filename, please.  It must be "image"');
 
         // Use the mv() method to place the file somewhere on your server
-        sampleFile.mv(`public/images/${sampleFile.name.split([])}`, function (err) {
+        const [filename, format] = sampleFile.name.split(['.']);
+        sampleFile.mv(`public/images/${uniqid()}.${format}`, function (err) {
             if (err)
                 return res.status(500).send(err);
 
