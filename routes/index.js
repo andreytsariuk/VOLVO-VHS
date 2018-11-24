@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
+const fileUpload = require('express-fileupload');
+const { FilesConstroller } = require('../controllers');
+router.use(fileUpload());
 
-router.post('/upload', function (req, res) {
-  console.log(req.files.foo); // the uploaded file object
-});
+router.post('/upload', FilesConstroller.upload);
+router.post('/recognize', FilesConstroller.recognize);
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
