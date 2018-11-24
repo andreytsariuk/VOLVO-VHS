@@ -105,7 +105,7 @@ def convert_mask(mask):
                print(i, j, indices)
                result.append({
                    "x": i,
-                   "y": j;
+                   "y": j,
                    "masks": indices
                })   
 
