@@ -47,7 +47,6 @@ class InferenceConfig(coco.CocoConfig):
 
 
 config = InferenceConfig()
-config.display()
 
 
 # Create model object in inference mode.
@@ -110,7 +109,7 @@ def convert_mask(mask):
 
     return result              
 
-print(json.dumps({
+print("finish: ",json.dumps({
    "class_ids": results[0].get("class_ids").tolist(),
    "scores": convert_bitmap_to_array(results[0].get("scores")),
    "rois": convert_bitmap_to_array(results[0].get("rois")),

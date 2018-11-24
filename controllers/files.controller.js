@@ -1,7 +1,7 @@
 const express = require('express');
 const uniqid = require('uniqid');
-
-
+const spawn = require("child_process").spawn;
+const Promise = require('bluebird');
 
 
 
@@ -42,7 +42,20 @@ module.exports = class {
      * @param {function} next 
      */
     static recognize(req, res, next) {
-        res.send('recognized!')
+        const image = '6vm29zxjovofxan.jpg'
+       
+        return new Promise((resolve,reject)=>{
+            let result ='';
+            const pythonProcess = spawn('python',["test.py", image]);
+            pythonProcess.stdout.on('data', (data) => {
+               if(data.indexOf('finish')!==-1)
+                   result = data;
+            });
+            pythonProcess.on(exit,()=>resolve(result))
+        })
+        .then(result=>res.send(result))
+        .catch(err=>res.send(err));
+        
     }
 
 }
