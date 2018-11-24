@@ -96,6 +96,12 @@ def convert_bitmap_to_array(param):
     print(b)
     return json.dumps(b)
 
+def convert_mask(mask):
+    for i in mask
+        for j in mask[i]
+            indices = [k for k, x in enumerate(mask[i][j]) if x == "true"] 
+            print(indices)   
+
 #print(json.dumps({
 #    "class_ids": results[0].get("class_ids").tolist(),
 #    "scores": convert_bitmap_to_array(results[0].get("scores")),
@@ -103,5 +109,5 @@ def convert_bitmap_to_array(param):
 #    "masks":results[0].get("masks").tolist(),
 #}))
 
-print(results[0])
+print(convert_mask(results[0].get("masks").tolist()))
 
