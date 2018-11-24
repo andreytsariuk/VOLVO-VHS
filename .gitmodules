@@ -1,0 +1,3 @@
+[submodule "h5-models"]
+	path = h5-models
+	url = https://github.com/andreytsariuk/VOLVO-H5-models.git
