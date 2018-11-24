@@ -1,5 +1,4 @@
 #!/usr/bin/python
-import coco
 from mrcnn import visualize
 import mrcnn.model as modellib
 from mrcnn import utils
@@ -20,8 +19,8 @@ ROOT_DIR = os.path.abspath("./")
 sys.path.append(ROOT_DIR)  # To find local version of the library
 # Import COCO config
 # To find local version
-sys.path.append(os.path.join(ROOT_DIR, "./coco/"))
-
+sys.path.append(os.path.join(ROOT_DIR, "coco/"))
+import coco
 # %matplotlib inline
 
 # Directory to save logs and trained model
