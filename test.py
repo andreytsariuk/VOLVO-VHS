@@ -98,7 +98,7 @@ def convert_bitmap_to_array(param):
 
 def convert_mask(mask):
     for mask_i in mask:
-        for mask_j in mask[i]:
+        for mask_j in mask_i:
             indices = [k for k, x in enumerate(mask_j) if x == "true"] 
             print(indices)   
 
