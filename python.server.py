@@ -22,9 +22,9 @@ class MyHandler(BaseHTTPRequestHandler):
         post_data = self.rfile.read(content_length) # <--- Gets the data itself
         post_body = json.loads(post_data.decode('utf-8'))
         queue.append(post_body['image'])
-        my_num = bool(0)
+        my_num = bool(1) if len(queue)<=2 else  bool(0)
         while my_num!=bool(1):
-            my_num = bool(1) if queue[0] == post_body['image'] else  bool(0)
+            my_num = bool(1) if len(queue)<=2 else  bool(0)
 
         print('FOOOOO POST',post_body['image'])
         saveToFile(post_body['image'], model, dataset_val)
