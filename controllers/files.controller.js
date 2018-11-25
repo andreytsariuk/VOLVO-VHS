@@ -46,20 +46,26 @@ module.exports = class {
         return new Promise((resolve,reject)=>{
        console.log(image)
             let result ='';
+
             const pythonProcess = spawn('python3',["test.py", image]);
-            pythonProcess.on('data', (data) => {
-                console.log('data',data)
-               if(data.indexOf('finish')!==-1)
-                   result = data;
-            });
-            pythonProcess.on('exit',(exit)=>{
-               console.log('exit',exit);
-               return resolve(result);
-            });
-            pythonProcess.on('uncaughtException',(exit)=>{
-                console.log('uncaughtException',exit);
-                return reject(exit);
-             });
+
+
+            pythonProcess.stdout.on('data', (data) => {
+                console.log(`stdout: ${data}`);
+                if(data.indexOf('finish')!==-1)
+                result = data;
+              });
+              
+              pythonProcess.stderr.on('data', (data) => {
+                console.log(`stderr: ${data}`);
+                return reject(data);
+              });
+              
+              pythonProcess.on('close', (code) => {
+                console.log(`child process exited with code ${code}`);
+                return resolve(code);
+              });
+
         })
         .then(result=>res.send(result))
         .catch(err=>res.send(err));
