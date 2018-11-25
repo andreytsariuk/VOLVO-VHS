@@ -65,6 +65,5 @@ module.exports = class {
         .catch(err=>res.send(err));
         
     }
-    curl -d "param1=value1&param2=value2" -X POST http://168.63.64.145/recognize
 }
 
