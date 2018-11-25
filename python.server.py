@@ -6,7 +6,7 @@ import json
 
 HOST_NAME = 'localhost'
 PORT_NUMBER = 9000
-dataset_val, model, coco = prepareDatasetAndModel()
+
 queue = []
 
 
@@ -18,6 +18,7 @@ class MyHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
+        dataset_val, model, coco = prepareDatasetAndModel()
          # <--- Gets the size of data
         content_length = int(self.headers['Content-Length'])
         # <--- Gets the data itself
