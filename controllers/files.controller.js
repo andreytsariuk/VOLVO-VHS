@@ -72,7 +72,7 @@ module.exports = class {
             console.log('\nresult_1: ',result.slice(result.length-300,result.length))
 
             try {
-                result = JSON.parse(result);
+                out = JSON.parse(result);
                 console.log(result.masks.length)
             } catch (error) {
                 console.log('err',error)
