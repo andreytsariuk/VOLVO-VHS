@@ -30,7 +30,7 @@ from mrcnn import model as modellib, utils
 # COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 model_path = os.path.join(ROOT_DIR, "h5-models/tooths.h5")
 dataset_path =  os.path.join(ROOT_DIR, "public/images/tooths")
-results_dir = os.path.join(ROOT_DIR, "/public/images/tooths_result")
+results_dir = os.path.join(ROOT_DIR, "public/images/tooths_result")
 
 # Directory to save logs and model checkpoints, if not provided
 # through the command line argument --logs
