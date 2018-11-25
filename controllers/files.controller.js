@@ -46,7 +46,7 @@ module.exports = class {
         return new Promise((resolve,reject)=>{
        console.log(image)
             let result ='';
-            const pythonProcess = spawn('python3',["test.py", image]);
+            const pythonProcess = spawn('python3',["../test.py", image]);
             pythonProcess.on('data', (data) => {
                 console.log('data',data)
                if(data.indexOf('finish')!==-1)
@@ -65,6 +65,6 @@ module.exports = class {
         .catch(err=>res.send(err));
         
     }
-
+    curl -d "param1=value1&param2=value2" -X POST http://168.63.64.145/recognize
 }
 
