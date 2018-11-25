@@ -47,7 +47,7 @@ module.exports = class {
 
                 pythonProcess.on('close', (code) => {
                     console.log(`child process exited with code ${code}`);
-                    return resolve(fs.readFileSync(`public/images/tooths_results/${newFileName.replace('.jpg','.png')}`));
+                    return resolve(fs.readFileSync(`public/images/tooths_result/${newFileName.replace('.jpg','.png')}`));
                 });
             }))
             .then(newImage=>res.send({
