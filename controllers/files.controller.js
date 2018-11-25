@@ -30,13 +30,8 @@ module.exports = class {
         let newFileName = `${uniqid()}.${format}`;
         return new Promise
             .fromCallback(cb => sampleFile.mv(`public/images/tooths/${newFileName}`, cb))
-            .then(() => axios({
-                method: 'post',
-                url: 'http://localhost:9000/recognize',
-                timeout: 280000, // Let's say you want to wait at least 180 seconds
-                data: {
-                    image: newFileName
-                }
+            .then(() => axios.post('http://localhost:9000/recognize', {
+                image: newFileName
             }))
             .then(() => res.send({
                 image: fs.readFileSync(`public/images/tooths_result/${newFileName.replace('.jpg', '.png')}`)
