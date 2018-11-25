@@ -36,7 +36,7 @@ class MyHandler(BaseHTTPRequestHandler):
             my_num = bool(1) if len(queue) < 2 else bool(0)
         try:
             print('FOOOOO POST', post_body['image'])
-            for i in range(0,10):
+            for i in range(0,50):
                 saveToFile(post_body['image'], self.model, self.dataset_val)
             print('FOOOOO POST DONE')
             # live queue
