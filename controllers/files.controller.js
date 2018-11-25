@@ -50,9 +50,8 @@ module.exports = class {
             const pythonProcess = spawn('python3',["test.py", image]);
 
 
-            pythonProcess.stdout.on('data', (data) => {
-                if(data.indexOf('finish')!==-1)
-                result = String(data).split('finish:  ')[1];
+              pythonProcess.stdout.on('data', (data) => {
+                result+=String(data);
               });
               
               pythonProcess.stderr.on('data', (data) => {
@@ -63,7 +62,7 @@ module.exports = class {
               
               pythonProcess.on('close', (code) => {
                 console.log(`child process exited with code ${code}`);
-                return resolve(result);
+                return resolve( result = String(data).split('finish:  ')[1]);
               });
 
         })
