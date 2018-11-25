@@ -51,19 +51,19 @@ module.exports = class {
 
 
             pythonProcess.stdout.on('data', (data) => {
-                console.log(`stdout: ${data}`);
                 if(data.indexOf('finish')!==-1)
                 result = data;
               });
               
               pythonProcess.stderr.on('data', (data) => {
                 console.log(`stderr: ${data}`);
+                if(data.indexOf('error')!==-1)
                 return reject(data);
               });
               
               pythonProcess.on('close', (code) => {
                 console.log(`child process exited with code ${code}`);
-                return resolve(code);
+                return resolve(result);
               });
 
         })
