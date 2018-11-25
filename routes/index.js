@@ -4,7 +4,8 @@ const fileUpload = require('express-fileupload');
 const { FilesConstroller } = require('../controllers');
 router.use(fileUpload());
 
-router.post('/upload', FilesConstroller.upload);
+router.post('/upload/tooth', FilesConstroller.uploadTooth);
+router.post('/upload/roller', FilesConstroller.uploadRoller);
 router.post('/recognize', FilesConstroller.recognize);
 
 /* GET home page. */

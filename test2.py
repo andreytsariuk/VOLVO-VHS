@@ -19,7 +19,7 @@ import urllib.request
 import shutil
 
 # Root directory of the project
-ROOT_DIR = os.path.abspath("../../")
+ROOT_DIR = os.path.abspath("./")
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library
@@ -28,8 +28,8 @@ from mrcnn import model as modellib, utils
 
 # Path to trained weights file
 # COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
-model_path = "/home/brans/datasets/volvo/mask_rcnn_coco_0030.h5"
-dataset_path = "/home/brans/datasets/volvo"
+model_path = os.path.join(ROOT_DIR, "h5-models/main.h5")
+dataset_path =  os.path.join(ROOT_DIR, "public/images")
 
 # Directory to save logs and model checkpoints, if not provided
 # through the command line argument --logs
