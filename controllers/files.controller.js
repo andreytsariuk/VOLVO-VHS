@@ -30,14 +30,14 @@ module.exports = class {
         let newFileName = `${uniqid()}.${format}`;
         return new Promise
             .fromCallback(cb => sampleFile.mv(`public/images/tooths/${newFileName}`, cb))
-            .then(() => axios.post({
-                image:newFileName
+            .then(() => axios.post('http://localhost:9000/recognize', {
+                image: newFileName
             }))
-            .then(()=>res.send({
-                image:fs.readFileSync(`public/images/tooths_result/${newFileName.replace('.jpg','.png')}`)
+            .then(() => res.send({
+                image: fs.readFileSync(`public/images/tooths_result/${newFileName.replace('.jpg', '.png')}`)
             }))
-            .catch(err=>{
-                console.log('Err',err);
+            .catch(err => {
+                console.log('Err', err);
                 res.send(err);
             });
 
