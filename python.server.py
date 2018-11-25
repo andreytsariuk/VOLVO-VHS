@@ -18,28 +18,32 @@ class MyHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
-         # <--- Gets the size of data
-        content_length = int(self.headers['Content-Length'])
-        # <--- Gets the data itself
-        post_data = self.rfile.read(content_length)
-        post_body = json.loads(post_data.decode('utf-8'))
-        print('Append for Parse', post_body['image'])
-        print('QUEUe LEN', len(queue))
-        queue.append(post_body['image'])
-        my_num = bool(1) if len(queue) <= 2 else bool(0)
-        print (my_num)
-        while my_num != bool(1):
-            my_num = bool(1) if len(queue) <= 2 else bool(0)
+        try:
+             # <--- Gets the size of data
+            content_length = int(self.headers['Content-Length'])
+            # <--- Gets the data itself
+            post_data = self.rfile.read(content_length)
+            post_body = json.loads(post_data.decode('utf-8'))
+            print('Append for Parse', post_body['image'])
+            print('QUEUe LEN', len(queue))
+            queue.append(post_body['image'])
+            my_num = bool(1) if len(queue) < 2 else bool(0)
+            print (my_num)
+            while my_num != bool(1):
+                my_num = bool(1) if len(queue) < 2 else bool(0)
 
-        print('FOOOOO POST', post_body['image'])
-        saveToFile(post_body['image'], model, dataset_val)
-        print('FOOOOO POST DONE')
-        # live queue
-        queue.remove(post_body['image'])
+            print('FOOOOO POST', post_body['image'])
+            saveToFile(post_body['image'], model, dataset_val)
+            print('FOOOOO POST DONE')
+            # live queue
+            queue.remove(post_body['image'])
 
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+        except:
+            print("Unexpected error:", sys.exc_info()[0])
+            pass
 
     def do_GET(self):
         paths = {
