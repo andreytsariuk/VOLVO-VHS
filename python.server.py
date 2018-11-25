@@ -15,7 +15,11 @@ class MyHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
-        print('FOOOOO POST')
+        content_len = int(self.headers.getheader('content-length', 0))
+        post_body = self.rfile.read(content_len)
+
+
+        print('FOOOOO POST',post_body)
         saveToFile('6vm2eenjox7j8lw.jpg', model, dataset_val)
         print('FOOOOO POST DONE')
         

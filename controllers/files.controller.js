@@ -3,7 +3,7 @@ const uniqid = require('uniqid');
 const spawn = require("child_process").spawn;
 const Promise = require('bluebird');
 const fs = require('fs');
-
+const axios = require('axios');
 
 
 
@@ -30,28 +30,11 @@ module.exports = class {
         let newFileName = `${uniqid()}.${format}`;
         return new Promise
             .fromCallback(cb => sampleFile.mv(`public/images/tooths/${newFileName}`, cb))
-            .then(() => new Promise((resolve, reject) => {
-                console.log(newFileName)
-
-                const pythonProcess = spawn('python3', ["tooth.py", newFileName]);
-
-                pythonProcess.stdout.on('data', (data) => {
-                    console.log(`stdout: ${data}`) 
-                });
-
-                pythonProcess.stderr.on('data', (data) => {
-                    console.log(`stderr: ${data}`);
-                    if (data.indexOf('error') !== -1)
-                        return reject(data);
-                });
-
-                pythonProcess.on('close', (code) => {
-                    console.log(`child process exited with code ${code}`);
-                    return resolve(fs.readFileSync(`public/images/tooths_result/${newFileName.replace('.jpg','.png')}`));
-                });
+            .then(() => axios.post({
+                image:newFileName
             }))
-            .then(newImage=>res.send({
-                image:newImage
+            .then(()=>res.send({
+                image:fs.readFileSync(`public/images/tooths_result/${newFileName.replace('.jpg','.png')}`)
             }))
             .catch(err=>{
                 console.log('Err',err);
