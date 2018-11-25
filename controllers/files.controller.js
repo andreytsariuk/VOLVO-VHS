@@ -26,12 +26,38 @@ module.exports = class {
 
         // Use the mv() method to place the file somewhere on your server
         const [filename, format] = sampleFile.name.split(['.']);
-        sampleFile.mv(`public/images/tooths/${uniqid()}.${format}`, function (err) {
-            if (err)
-                return res.status(500).send(err);
+        let newFileName = uniqid();
+        return new Promise
+            .fromCallback(cb => sampleFile.mv(`public/images/tooths/${newFileName}.${format}`, cb))
+            .then(() => new Promise((resolve, reject) => {
+                console.log(newFileName)
 
-            res.send('File uploaded!');
-        });
+                const pythonProcess = spawn('python3', ["tooth.py", newFileName]);
+
+                pythonProcess.stdout.on('data', (data) => {
+                    console.log(`stdout: ${data}`) 
+                });
+
+                pythonProcess.stderr.on('data', (data) => {
+                    console.log(`stderr: ${data}`);
+                    if (data.indexOf('error') !== -1)
+                        return reject(data);
+                });
+
+                pythonProcess.on('close', (code) => {
+                    console.log(`child process exited with code ${code}`);
+                    return resolve(fs.readFileSync(`public/images/tooths_results/${newFileName.replace('.jpg','.png')}`));
+                });
+            }))
+            .then(newImage=>res.send({
+                image:newImage
+            }))
+            .catch(err=>{
+                console.log('Err',err);
+                res.send(err);
+            });
+
+
     }
 
     /**
@@ -59,7 +85,7 @@ module.exports = class {
             res.send('File uploaded!');
         });
     }
-    
+
 
     /**
      * 
@@ -69,44 +95,44 @@ module.exports = class {
      */
     static recognize(req, res, next) {
         const image = '6vm2ftwjowvn8by.jpg'
-        return new Promise((resolve,reject)=>{
-       console.log(image)
-            let result ='';
+        return new Promise((resolve, reject) => {
+            console.log(image)
+            let result = '';
 
-            const pythonProcess = spawn('python3',["test.py", image]);
+            const pythonProcess = spawn('python3', ["tooth.py", image]);
 
 
-              pythonProcess.stdout.on('data', (data) => {
-                result+=String(data);
-              });
-              
-              pythonProcess.stderr.on('data', (data) => {
+            pythonProcess.stdout.on('data', (data) => {
+                result += String(data);
+            });
+
+            pythonProcess.stderr.on('data', (data) => {
                 console.log(`stderr: ${data}`);
-                if(data.indexOf('error')!==-1)
-                return reject(data);
-              });
-              
-              pythonProcess.on('close', (code) => {
+                if (data.indexOf('error') !== -1)
+                    return reject(data);
+            });
+
+            pythonProcess.on('close', (code) => {
                 console.log(`child process exited with code ${code}`);
                 return resolve(result.split('finish:  ')[1]);
-              });
+            });
 
         })
-        .then(result=>{
-            let out={};
-            console.log('result_1: ',result.slice(0,300))
-            console.log('\nresult_1: ',result.slice(result.length-300,result.length))
+            .then(result => {
+                let out = {};
+                console.log('result_1: ', result.slice(0, 300))
+                console.log('\nresult_1: ', result.slice(result.length - 300, result.length))
 
-            try {
-                out = JSON.parse(result);
-                console.log(result.masks.length)
-            } catch (error) {
-                console.log('err',error)
-            }
-            res.send(out)
-        })
-        .catch(err=>res.send(err));
-        
+                try {
+                    out = JSON.parse(result);
+                    console.log(result.masks.length)
+                } catch (error) {
+                    console.log('err', error)
+                }
+                res.send(out)
+            })
+            .catch(err => res.send(err));
+
     }
 }
 
