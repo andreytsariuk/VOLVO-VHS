@@ -7,7 +7,7 @@ import json
 HOST_NAME = 'localhost'
 PORT_NUMBER = 9000
 dataset_val, model, coco = prepareDatasetAndModel()
-
+queue = [];
 
 class MyHandler(BaseHTTPRequestHandler):
 
@@ -21,11 +21,17 @@ class MyHandler(BaseHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length) # <--- Gets the data itself
         post_body = json.loads(post_data.decode('utf-8'))
+        queue.append(post_body['image'])
+        my_num = bool(0)
+        while !my_num:
+            my_num = bool(1) if queue[0] == post_body['image'] else  bool(0)
 
         print('FOOOOO POST',post_body['image'])
         saveToFile(post_body['image'], model, dataset_val)
         print('FOOOOO POST DONE')
-        
+        #live queue 
+        queue.remove(post_body['image'])
+
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
