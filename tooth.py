@@ -19,7 +19,7 @@ import urllib.request
 import shutil
 
 # Root directory of the project
-ROOT_DIR = os.path.abspath("./app")
+ROOT_DIR = os.path.abspath("./")
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library
@@ -89,7 +89,7 @@ class CocoDataset(utils.Dataset):
             self.auto_download(dataset_dir, subset, year)
 
         coco = COCO(
-            os.path.join(ROOT_DIR, "export-coco-2018-11-24T19_57_06.873102.json").format(dataset_dir, subset, year))
+            os.path.join(ROOT_DIR, "app/export-coco-2018-11-24T19_57_06.873102.json").format(dataset_dir, subset, year))
         if subset == "minival" or subset == "valminusminival":
             subset = "val"
         image_dir = "{}/{}{}".format(dataset_dir, subset, year)
