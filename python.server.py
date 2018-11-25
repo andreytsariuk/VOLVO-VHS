@@ -1,12 +1,12 @@
 #!/usr/bin/python
 from http.server import BaseHTTPRequestHandler, HTTPServer
-# from tooth import *
+from tooth import *
 import time
 import json
 
 HOST_NAME = 'localhost'
 PORT_NUMBER = 9000
-# dataset_val, model, coco = prepareDatasetAndModel()
+dataset_val, model, coco = prepareDatasetAndModel()
 queue = []
 
 
