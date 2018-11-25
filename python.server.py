@@ -2,10 +2,12 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from tooth import *
 import time
+import json
 
 HOST_NAME = 'localhost'
 PORT_NUMBER = 9000
 dataset_val, model, coco = prepareDatasetAndModel()
+
 
 class MyHandler(BaseHTTPRequestHandler):
 
@@ -15,11 +17,12 @@ class MyHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
-        content_len = int(self.headers.getheader('content-length', 0))
-        post_body = self.rfile.read(content_len)
+         # <--- Gets the size of data
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length) # <--- Gets the data itself
+        post_body = json.loads(post_data.decode('utf-8'))
 
-
-        print('FOOOOO POST',post_body)
+        print('FOOOOO POST',post_body['image'])
         saveToFile('6vm2eenjox7j8lw.jpg', model, dataset_val)
         print('FOOOOO POST DONE')
         
@@ -64,3 +67,5 @@ if __name__ == '__main__':
         pass
     httpd.server_close()
     print(time.asctime(), 'Server Stops - %s:%s' % (HOST_NAME, PORT_NUMBER))
+
+
