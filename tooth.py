@@ -434,5 +434,7 @@ def saveToFile(path, model, dataset_val):
     display_instances_my(image, r['rois'], r['masks'], r['class_ids'], dataset_val.class_names, r['scores'], pathToSave = os.path.join(results_dir, path.replace(".jpg",".png")))
 
 
-# dataset_val, model, coco = prepareDatasetAndModel()
-# saveToFile(sys.argv[1], model, dataset_val)
+ dataset_val, model, coco = prepareDatasetAndModel()
+
+for i in range(0,40)
+    saveToFile('6vm2ni4joxayvjy.jpg'], model, dataset_val)
