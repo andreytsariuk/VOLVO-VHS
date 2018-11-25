@@ -62,7 +62,7 @@ module.exports = class {
               
               pythonProcess.on('close', (code) => {
                 console.log(`child process exited with code ${code}`);
-                return resolve( result = String(data).split('finish:  ')[1]);
+                return resolve(result.split('finish:  ')[1]);
               });
 
         })
