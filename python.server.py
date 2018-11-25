@@ -79,10 +79,10 @@ class MyHandler(BaseHTTPRequestHandler):
 class http_server:
 
     def __init__(self, dataset_val, model):
-        myHandler.dataset_val = dataset_val
-        myHandler.model = model
+        MyHandler.dataset_val = dataset_val
+        MyHandler.model = model
 
-        server = HTTPServer((HOST_NAME, PORT_NUMBER), myHandler)
+        server = HTTPServer((HOST_NAME, PORT_NUMBER), MyHandler)
         server.serve_forever()
 
 
