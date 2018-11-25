@@ -1,17 +1,13 @@
 #!/usr/bin/python
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-# from tooth import *
+from tooth import *
 import time
 
 HOST_NAME = 'localhost'
 PORT_NUMBER = 9000
-
+dataset_val, model, coco = prepareDatasetAndModel()
 
 class MyHandler(BaseHTTPRequestHandler):
-
-    def __init__():
-        self.dataset_val, self.model, self.coco = prepareDatasetAndModel()
-        super()
 
     def do_HEAD(self):
         self.send_response(200)
@@ -20,7 +16,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         print('FOOOOO POST')
-        saveToFile('6vm2eenjox7j8lw.jpg', self.model, self.dataset_val)
+        saveToFile('6vm2eenjox7j8lw.jpg', model, dataset_val)
         print('FOOOOO POST DONE')
         
         self.send_response(200)
