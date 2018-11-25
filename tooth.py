@@ -430,8 +430,9 @@ def saveToFile(path, model, dataset_val):
     r = model.detect([image], verbose=0)[0]
     print('detected')
     display_instances_my(image, r['rois'], r['masks'], r['class_ids'], dataset_val.class_names, r['scores'], pathToSave = os.path.join(results_dir, 
-    print('saved')
     path.replace(".jpg",".png")))
+    print('saved')
+    
 
 
 dataset_val, model = prepareDatasetAndModel()
