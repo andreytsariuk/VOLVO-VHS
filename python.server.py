@@ -23,7 +23,7 @@ class MyHandler(BaseHTTPRequestHandler):
         post_body = json.loads(post_data.decode('utf-8'))
 
         print('FOOOOO POST',post_body['image'])
-        saveToFile('6vm2eenjox7j8lw.jpg', model, dataset_val)
+        saveToFile(post_body['image'], model, dataset_val)
         print('FOOOOO POST DONE')
         
         self.send_response(200)
