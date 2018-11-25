@@ -9,8 +9,9 @@ PORT_NUMBER = 9000
 
 class MyHandler(BaseHTTPRequestHandler):
 
-    __init__():
+    def __init__():
         self.dataset_val, self.model, self.coco = prepareDatasetAndModel()
+        super()
 
     def do_HEAD(self):
         self.send_response(200)
