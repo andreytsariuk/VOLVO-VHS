@@ -31,7 +31,7 @@ module.exports = class {
         return new Promise
             .fromCallback(cb => sampleFile.mv(`public/images/tooths/${newFileName}`, cb))
             .then(() => axios({
-                method: 'POST',
+                method: 'post',
                 url: 'http://localhost:9000/recognize',
                 timeout: 280000, // Let's say you want to wait at least 180 seconds
                 data: {
