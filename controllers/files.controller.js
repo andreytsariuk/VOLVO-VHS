@@ -69,6 +69,9 @@ module.exports = class {
         })
         .then(result=>{
             let out={};
+            console.log('result_1: ',result.slice(0,300))
+            console.log('\nresult_1: ',result.slice(result.length-300,result.length))
+
             try {
                 result = JSON.parse(result);
                 console.log(result.masks.length)
