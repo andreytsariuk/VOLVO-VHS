@@ -42,10 +42,9 @@ module.exports = class {
      * @param {function} next 
      */
     static recognize(req, res, next) {
-        const image = '6vm29zxjovofxan.jpg'
+        const image = '6vm2ftwjowvn8by.jpg'
         return new Promise((resolve,reject)=>{
        console.log(image)
-            
             let result ='';
             const pythonProcess = spawn('python3',["test.py", image]);
             pythonProcess.on('data', (data) => {
@@ -54,9 +53,13 @@ module.exports = class {
                    result = data;
             });
             pythonProcess.on('exit',(exit)=>{
-               console.log(exit)
-               return resolve(result)
-            })
+               console.log('exit',exit);
+               return resolve(result);
+            });
+            pythonProcess.on('uncaughtException',(exit)=>{
+                console.log('uncaughtException',exit);
+                return reject(exit);
+             });
         })
         .then(result=>res.send(result))
         .catch(err=>res.send(err));
