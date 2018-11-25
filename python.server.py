@@ -7,7 +7,8 @@ import json
 HOST_NAME = 'localhost'
 PORT_NUMBER = 9000
 dataset_val, model, coco = prepareDatasetAndModel()
-queue = [];
+queue = []
+
 
 class MyHandler(BaseHTTPRequestHandler):
 
@@ -19,17 +20,21 @@ class MyHandler(BaseHTTPRequestHandler):
     def do_POST(self):
          # <--- Gets the size of data
         content_length = int(self.headers['Content-Length'])
-        post_data = self.rfile.read(content_length) # <--- Gets the data itself
+        # <--- Gets the data itself
+        post_data = self.rfile.read(content_length)
         post_body = json.loads(post_data.decode('utf-8'))
+        print('Append for Parse', post_body['image'])
+        print('QUEUe LEN', len(queue))
         queue.append(post_body['image'])
-        my_num = bool(1) if len(queue)<=2 else  bool(0)
-        while my_num!=bool(1):
-            my_num = bool(1) if len(queue)<=2 else  bool(0)
+        my_num = bool(1) if len(queue) <= 2 else bool(0)
+        print (my_num)
+        while my_num != bool(1):
+            my_num = bool(1) if len(queue) <= 2 else bool(0)
 
-        print('FOOOOO POST',post_body['image'])
+        print('FOOOOO POST', post_body['image'])
         saveToFile(post_body['image'], model, dataset_val)
         print('FOOOOO POST DONE')
-        #live queue 
+        # live queue
         queue.remove(post_body['image'])
 
         self.send_response(200)
@@ -73,5 +78,3 @@ if __name__ == '__main__':
         pass
     httpd.server_close()
     print(time.asctime(), 'Server Stops - %s:%s' % (HOST_NAME, PORT_NUMBER))
-
-
