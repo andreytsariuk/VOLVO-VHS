@@ -67,7 +67,16 @@ module.exports = class {
               });
 
         })
-        .then(result=>res.send(result))
+        .then(result=>{
+            let out={};
+            try {
+                result = JSON.parse(result);
+                console.log(result.masks.length)
+            } catch (error) {
+                console.log('err',error)
+            }
+            res.send(out)
+        })
         .catch(err=>res.send(err));
         
     }
