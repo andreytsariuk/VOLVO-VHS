@@ -27,7 +27,7 @@ module.exports = class {
 
         // Use the mv() method to place the file somewhere on your server
         const [filename, format] = sampleFile.name.split(['.']);
-        let newFileName = `${newFileName}.${format}`;
+        let newFileName = `${uniqid()}.${format}`;
         return new Promise
             .fromCallback(cb => sampleFile.mv(`public/images/tooths/${newFileName}`, cb))
             .then(() => new Promise((resolve, reject) => {
