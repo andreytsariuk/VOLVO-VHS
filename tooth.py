@@ -437,4 +437,4 @@ def saveToFile(path, model, dataset_val):
  dataset_val, model, coco = prepareDatasetAndModel()
 
 for i in range(0,40)
-    saveToFile('6vm2ni4joxayvjy.jpg'], model, dataset_val)
+    saveToFile('6vm2ni4joxayvjy.jpg', model, dataset_val)
