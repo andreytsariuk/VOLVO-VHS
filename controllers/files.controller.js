@@ -46,7 +46,7 @@ module.exports = class {
         return new Promise((resolve,reject)=>{
        console.log(image)
             let result ='';
-            const pythonProcess = spawn('python3',["../test.py", image]);
+            const pythonProcess = spawn('python3',["test.py", image]);
             pythonProcess.on('data', (data) => {
                 console.log('data',data)
                if(data.indexOf('finish')!==-1)
