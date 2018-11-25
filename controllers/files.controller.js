@@ -52,7 +52,7 @@ module.exports = class {
 
             pythonProcess.stdout.on('data', (data) => {
                 if(data.indexOf('finish')!==-1)
-                result = data.split('finish:  ')[1];
+                result = String(data).split('finish:  ')[1];
               });
               
               pythonProcess.stderr.on('data', (data) => {
