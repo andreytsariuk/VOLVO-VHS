@@ -3,6 +3,10 @@ import sys
 import time
 import numpy as np
 import imgaug  # https://github.com/aleju/imgaug (pip3 install imgaug)
+from mrcnn import utils
+from mrcnn import visualize
+from mrcnn.visualize import display_images
+import mrcnn.model as modellib
 
 # Download and install the Python COCO tools from https://github.com/waleedka/coco
 # That's a fork from the original https://github.com/pdollar/coco with a bug
@@ -19,7 +23,7 @@ import urllib.request
 import shutil
 
 # Root directory of the project
-ROOT_DIR = os.path.abspath("./")
+ROOT_DIR = os.path.abspath("../../")
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library
@@ -28,9 +32,8 @@ from mrcnn import model as modellib, utils
 
 # Path to trained weights file
 # COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
-model_path = os.path.join(ROOT_DIR, "h5-models/tooths.h5")
-dataset_path =  os.path.join(ROOT_DIR, "public/images/tooths")
-results_dir = os.path.join(ROOT_DIR, "public/images/tooths_result")
+model_path = "/home/brans/datasets/volvo/mask_rcnn_coco_0030.h5"
+dataset_path = "/home/brans/datasets/volvo"
 
 # Directory to save logs and model checkpoints, if not provided
 # through the command line argument --logs
@@ -45,6 +48,8 @@ DEFAULT_DATASET_YEAR = "2014"
 
 
 class CocoConfig(Config):
+    DETECTION_MIN_CONFIDENCE = 0.9
+
     """Configuration for training on MS COCO.
     Derives from the base Config class and overrides values specific
     to the COCO dataset.
@@ -89,7 +94,7 @@ class CocoDataset(utils.Dataset):
             self.auto_download(dataset_dir, subset, year)
 
         coco = COCO(
-            os.path.join(ROOT_DIR, "app/export-coco-2018-11-24T19_57_06.873102.json").format(dataset_dir, subset, year))
+            "/home/brans/datasets/volvo/export-coco-2018-11-24T19_57_06.873102.json".format(dataset_dir, subset, year))
         if subset == "minival" or subset == "valminusminival":
             subset = "val"
         image_dir = "{}/{}{}".format(dataset_dir, subset, year)
@@ -281,14 +286,13 @@ def evaluate_coco(model, dataset, coco, eval_type="bbox", limit=0, image_ids=Non
 
         # Convert results to COCO format
         # Cast masks to uint8 because COCO tools errors out on bool
-        # image_results = build_coco_results(dataset, coco_image_ids[i:i + 1],
-        #                                    r["rois"], r["class_ids"],
-        #                                    r["scores"],
-        #                                    r["masks"].astype(np.uint8))
+        #         image_results = build_coco_results(dataset, coco_image_ids[i:i + 1],
+        #                                            r["rois"], r["class_ids"],
+        #                                            r["scores"],
+        #                                            r["masks"].astype(np.uint8))
+        results.append([coco_image_ids[i:i + 1], r])
 
-       # image_results = r['rois'], r['masks'], r['class_ids'], r['scores']
-
-        results.extend([coco_image_ids[i:i + 1], r])
+        # results.extend(image_results)
 
     print("Prediction time: {}. Average {}/image".format(
         t_prediction, t_prediction / len(image_ids)))
@@ -317,14 +321,11 @@ def prepareDatasetAndModel():
 
     # Validation dataset
     dataset_val = CocoDataset()
-    #val_type = "minival"
-    #coco = dataset_val.load_coco(dataset_path, val_type, year=2014, return_coco=True, auto_download=False)
-    #dataset_val.prepare()
-    return dataset_val, model
+    val_type = "minival"
+    coco = dataset_val.load_coco(dataset_path, val_type, year=2014, return_coco=True, auto_download=False)
+    dataset_val.prepare()
+    return dataset_val, model, coco
 
-
-
-#results = getResults(dataset_val, model, coco)
 from mrcnn.visualize import *
 
 def display_instances_my(image, boxes, masks, class_ids, class_names,
@@ -366,33 +367,33 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
     ax.set_xlim(-10, width + 10)
     ax.axis('off')
     ax.set_title(title)
-    print('1')
+
     masked_image = image.astype(np.uint32).copy()
     for i in range(N):
         color = colors[i]
 
-        # # Bounding box
-        # if not np.any(boxes[i]):
-        #     # Skip this instance. Has no bbox. Likely lost in image cropping.
-        #     continue
-        # y1, x1, y2, x2 = boxes[i]
-        # if show_bbox:
-        #     p = patches.Rectangle((x1, y1), x2 - x1, y2 - y1, linewidth=2,
-        #                         alpha=0.7, linestyle="dashed",
-        #                         edgecolor=color, facecolor='none')
-        #     ax.add_patch(p)
+        # Bounding box
+        if not np.any(boxes[i]):
+            # Skip this instance. Has no bbox. Likely lost in image cropping.
+            continue
+        y1, x1, y2, x2 = boxes[i]
+        if show_bbox:
+            p = patches.Rectangle((x1, y1), x2 - x1, y2 - y1, linewidth=2,
+                                alpha=0.7, linestyle="dashed",
+                                edgecolor=color, facecolor='none')
+            ax.add_patch(p)
 
-        # # Label
-        # if not captions:
-        #     class_id = class_ids[i]
-        #     score = scores[i] if scores is not None else None
-        #     label = class_names[class_id]
-        #     x = random.randint(x1, (x1 + x2) // 2)
-        #     caption = "{} {:.3f}".format(label, score) if score else label
-        # else:
-        #     caption = captions[i]
-        # ax.text(x1, y1 + 8, caption,
-        #         color='w', size=11, backgroundcolor="none")
+        # Label
+        if not captions:
+            class_id = class_ids[i]
+            score = scores[i] if scores is not None else None
+            label = class_names[class_id]
+            x = random.randint(x1, (x1 + x2) // 2)
+            caption = "{} {:.3f}".format(label, score) if score else label
+        else:
+            caption = captions[i]
+        ax.text(x1, y1 + 8, caption,
+                color='w', size=11, backgroundcolor="none")
 
         # Mask
         mask = masks[:, :, i]
@@ -411,30 +412,106 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
             p = Polygon(verts, facecolor="none", edgecolor=color)
             ax.add_patch(p)
     ax.imshow(masked_image.astype(np.uint8))
-    print('2')
+
     if (pathToSave is None):
-        print('4')
         if auto_show:
             plt.show()
     else:
-        print('3')
         plt.savefig(pathToSave)
-		
+
+
+def getResults(dataset_val, model, coco):
+    # dataset_val, model = prepareDatasetAndModel()
+    results = evaluate_coco(model, dataset_val, coco, "bbox", limit=int(1))
+    return results
+
+dataset_val, model, coco = prepareDatasetAndModel()
+# results = getResults(dataset_val, model, coco)
+# imInfo = {}
+# for row in dataset_val.image_info:
+#     imInfo[row['id']] = row['path']
 import skimage.io
+cur_path = "/home/brans/datasets/volvo/t1.jpg"
 
+image = skimage.io.imread(cur_path)
 
-def saveToFile(path, model, dataset_val):
-    print('path',os.path.join(dataset_path, path))
-    print('path2',os.path.join(results_dir, path.replace(".jpg",".png")))
-    image = skimage.io.imread(os.path.join(dataset_path, path))
-    r = model.detect([image], verbose=0)[0]
-    print('detected')
-    display_instances_my(image, r['rois'], r['masks'], r['class_ids'], dataset_val.class_names, r['scores'], pathToSave = os.path.join(results_dir, 
-    print('saved')
-    path.replace(".jpg",".png")))
+    #image = skimage.io.imread(imInfo[image_id])
+    #results = model.detect([image], verbose=1)
 
+    # Visualize results
+    #r = results[0]
+r = model.detect([image], verbose=0)[0]
+#display_instances_my(image, r['rois'], r['masks'], r['class_ids'], dataset_val.class_names, r['scores'], pathToSave = '/home/brans/datasets/volvo/foo.png')
+    #"savefig('/home/brans/datasets/volvo/foo.png')
 
-dataset_val, model = prepareDatasetAndModel()
+TARG_THRESHOLD = 0.9
+classes = r['class_ids']
+scores = r['scores']
+shape = r['masks'].shape
+masks = r['masks'].reshape(shape[2],shape[0],shape[1])
+objectsCount = masks.shape[0]
 
-for i in range(0,40):
-    saveToFile('6vm2ni4joxayvjy.jpg', model, dataset_val)
+ma = np.where(masks)
+
+objecstMasks = []
+objectStats = []
+
+toothes = []
+botoms = []
+
+for obId in range(objectsCount):
+    objectStats.append(scores[obId] > TARG_THRESHOLD)
+    if(classes[obId] == 1):
+        toothes.append(obId)
+    elif(classes[obId] == 2):
+        botoms.append(obId)
+
+    curMasksIds = np.where(r['masks'][:, :, obId])
+    masksIdsLen = curMasksIds[0].shape[0]
+    objectMasks = []
+    for i in range(masksIdsLen):
+        objectMasks.append([curMasksIds[0][i], curMasksIds[1][i]])
+    objecstMasks.append(objectMasks)
+
+# coords = np.nonzero(masks[1])
+# coordsL = list(zip(list(coords[0]), list(coords[1])))
+from sympy import Point, Polygon, Point2D
+from sympy.geometry.util import centroid
+
+centroids = []
+
+if(len(toothes) < 2 or len(botoms) == 0):
+    print("Bad view point, try again")
+else:
+    for id in toothes:
+        toothMasc = objecstMasks[id]
+        points = []
+        # for pt in toothMasc:
+        #     points.append(Point2D(pt[0], pt[1]))
+
+        t = tuple(toothMasc)
+        p = Polygon(*t)
+        curCentroid = centroid(p)
+        centroids.append(curCentroid)
+
+toothDistances = []
+prevCentr = None
+
+maxId = []
+
+for centr in centroids:
+    if(prevCentr is not None):
+        dist = centr.distance(prevCentr)
+        toothDistances.append(prevCentr)
+
+    prevCentr = centr
+
+avgDist = np.mean(toothDistances)
+
+coordGood = []
+for x in range(shape[0]):
+    for y in range(shape[1]):
+        if(masks[2, x, y] == True):
+            print("OK")
+            break
+            coordGood.append([x, y])
