@@ -208,4 +208,4 @@ def saveToFile(paths):
     
 
 
-saveToFile(sys.argv[1])
+saveToFile([sys.argv[1]])
