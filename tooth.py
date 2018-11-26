@@ -51,10 +51,10 @@ class CocoConfig(Config):
     """
     # Give the configuration a recognizable name
     NAME = "coco"
-
+    DETECTION_MAX_INSTANCES = 10
     # We use a GPU with 12GB memory, which can fit two images.
     # Adjust down if you use a smaller GPU.
-    IMAGES_PER_GPU = 1
+    IMAGES_PER_GPU = 2
 
     # Uncomment to train on 8 GPUs (default is 1)
     GPU_COUNT = 2
@@ -210,4 +210,4 @@ def saveToFile(paths):
 
 
 for i in range(0,40):
-    saveToFile(['6vm2ni4joxayvjy.jpg', '6vm2ni4joxayvjy.jpg'])
+    saveToFile(['6vm2ni4joxayvjy.jpg', '6vm2ni4joxayvjy.jpg','6vm2ni4joxayvjy.jpg', '6vm2ni4joxayvjy.jpg'])
