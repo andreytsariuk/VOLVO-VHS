@@ -207,9 +207,10 @@ def saveToFile(path, model):
 
 
 class foo ():
+    __init__(self):
+        self.model =  prepareDatasetAndModel()
 
-    def init():
-            self.model =  prepareDatasetAndModel()
+            
     def main_1():
         for i in range(0,40):
             saveToFile('6vm2ni4joxayvjy.jpg', self.model)
@@ -217,5 +218,4 @@ class foo ():
 
 ma = foo()
 
-foo.init()
 foo.main_1()
