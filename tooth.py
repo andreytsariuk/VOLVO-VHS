@@ -192,7 +192,7 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
 import skimage.io
 
 
-def saveToFile(path, model):
+def saveToFile(path):
     model = prepareDatasetAndModel()
 
     print('path',os.path.join(dataset_path, path))
@@ -210,4 +210,4 @@ def saveToFile(path, model):
 
 
 for i in range(0,40):
-    saveToFile('6vm2ni4joxayvjy.jpg', model)
+    saveToFile('6vm2ni4joxayvjy.jpg')
