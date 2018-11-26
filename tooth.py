@@ -192,7 +192,7 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
 import skimage.io
 
 
-def saveToFile([paths]):
+def saveToFile(paths):
     model = prepareDatasetAndModel()
 
     print('path',os.path.join(dataset_path, path))
