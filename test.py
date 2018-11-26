@@ -30,13 +30,13 @@ import coco
 MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 
 # Local path to trained weights file
-COCO_MODEL_PATH = os.path.join(ROOT_DIR, "h5-models/main.h5")
+COCO_MODEL_PATH = os.path.join(ROOT_DIR, "h5-models/mask_rcnn_coco.h5")
 # Download COCO trained weights from Releases if needed
 if not os.path.exists(COCO_MODEL_PATH):
     utils.download_trained_weights(COCO_MODEL_PATH)
 
 # Directory of images to run detection on
-IMAGE_DIR = os.path.join(ROOT_DIR, "public/images")
+IMAGE_DIR = os.path.join(ROOT_DIR, "public/images/tooths")
 
 
 class InferenceConfig(coco.CocoConfig):
@@ -80,14 +80,17 @@ class_names = ['BG', 'person', 'bicycle', 'car', 'motorcycle', 'airplane',
 
 results = []
 
-for x in range(1, len(sys.argv)):
-    print(sys.argv[x])
+for x in range(0,40):
+    # print(sys.argv[x])
     image = skimage.io.imread(os.path.join(
-        IMAGE_DIR, sys.argv[x]))
+        IMAGE_DIR, '6vm2ni4joxayvjy.jpg'))
     # Run detection
+    print('start')
     result = model.detect([image], verbose=1)
+    print('end')
+    
     # Visualize results
-    results.append(result[0])
+    # results.append(result[0])
 
 
 def convert_bitmap_to_array(param):
@@ -109,12 +112,12 @@ def convert_mask(mask):
 
     return result              
 
-print("finish: ",json.dumps({
-   "class_ids": results[0].get("class_ids").tolist(),
-   "scores": convert_bitmap_to_array(results[0].get("scores")),
-   "rois": convert_bitmap_to_array(results[0].get("rois")),
-   "masks":convert_mask(results[0].get("masks").tolist())
-}))
+# print("finish: ",json.dumps({
+#    "class_ids": results[0].get("class_ids").tolist(),
+#    "scores": convert_bitmap_to_array(results[0].get("scores")),
+#    "rois": convert_bitmap_to_array(results[0].get("rois")),
+#    "masks":convert_mask(results[0].get("masks").tolist())
+# }))
 
 
 # print(convert_mask(results[0].get("masks").tolist()))
