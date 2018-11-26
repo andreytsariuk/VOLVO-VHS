@@ -140,27 +140,27 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
         color = colors[i]
 
         # # Bounding box
-        # if not np.any(boxes[i]):
-        #     # Skip this instance. Has no bbox. Likely lost in image cropping.
-        #     continue
-        # y1, x1, y2, x2 = boxes[i]
-        # if show_bbox:
-        #     p = patches.Rectangle((x1, y1), x2 - x1, y2 - y1, linewidth=2,
-        #                         alpha=0.7, linestyle="dashed",
-        #                         edgecolor=color, facecolor='none')
-        #     ax.add_patch(p)
+        if not np.any(boxes[i]):
+            # Skip this instance. Has no bbox. Likely lost in image cropping.
+            continue
+        y1, x1, y2, x2 = boxes[i]
+        if show_bbox:
+            p = patches.Rectangle((x1, y1), x2 - x1, y2 - y1, linewidth=2,
+                                alpha=0.7, linestyle="dashed",
+                                edgecolor=color, facecolor='none')
+            ax.add_patch(p)
 
         # # Label
-        # if not captions:
-        #     class_id = class_ids[i]
-        #     score = scores[i] if scores is not None else None
-        #     label = class_names[class_id]
-        #     x = random.randint(x1, (x1 + x2) // 2)
-        #     caption = "{} {:.3f}".format(label, score) if score else label
-        # else:
-        #     caption = captions[i]
-        # ax.text(x1, y1 + 8, caption,
-        #         color='w', size=11, backgroundcolor="none")
+        if not captions:
+            class_id = class_ids[i]
+            score = scores[i] if scores is not None else None
+            label = class_names[class_id]
+            x = random.randint(x1, (x1 + x2) // 2)
+            caption = "{} {:.3f}".format(label, score) if score else label
+        else:
+            caption = captions[i]
+        ax.text(x1, y1 + 8, caption,
+                color='w', size=11, backgroundcolor="none")
 
         # Mask
         mask = masks[:, :, i]
