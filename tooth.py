@@ -15,6 +15,7 @@ from pycocotools.cocoeval import COCOeval
 from pycocotools import mask as maskUtils
 
 import zipfile
+import urllib.request
 import shutil
 
 # Root directory of the project
@@ -192,6 +193,7 @@ import skimage.io
 
 
 def saveToFile(path, model):
+    model = prepareDatasetAndModel()
 
     print('path',os.path.join(dataset_path, path))
     print('path2',os.path.join(results_dir, path.replace(".jpg",".png")))
@@ -201,19 +203,11 @@ def saveToFile(path, model):
     print('detected')
     display_instances_my(image, r['rois'], r['masks'], r['class_ids'], ['BG','Tooth','Bottom'], r['scores'], pathToSave = os.path.join(results_dir, 
     path.replace(".jpg",".png")))
+    K.clear_session()
     print('saved')
     
 
 
-class foo:
-    model =  prepareDatasetAndModel()
-            
-    def main_1(self):
-        for i in range(0,40):
-            saveToFile('6vm2ni4joxayvjy.jpg', self.model)
-            time.sleep(1)
 
-
-ma = foo()
-
-foo.main_1(ma)
+for i in range(0,40):
+    saveToFile('6vm2ni4joxayvjy.jpg', model)
