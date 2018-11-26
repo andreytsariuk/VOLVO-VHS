@@ -193,11 +193,8 @@ import skimage.io
 
 
 def saveToFile(path, model):
-    import tensorflow as tf
-    sess = tf.Session()
 
     from keras import backend as K
-    K.set_session(sess)
     print('path',os.path.join(dataset_path, path))
     print('path2',os.path.join(results_dir, path.replace(".jpg",".png")))
     image = skimage.io.imread(os.path.join(dataset_path, path))
