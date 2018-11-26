@@ -347,6 +347,7 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
     """
     # Number of instances
     N = boxes.shape[0]
+    my_dpi = 96
     if not N:
         print("\n*** No instances to display *** \n")
     else:
@@ -355,7 +356,7 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
     # If no axis is passed, create one and automatically call show()
     auto_show = False
     if not ax:
-        _, ax = plt.subplots(1, figsize=figsize)
+        _, ax = plt.subplots(1, figsize=(1024/my_dpi, 1024/my_dpi), dpi=my_dpi))
         auto_show = False
 
     # Generate random colors
@@ -417,7 +418,7 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
         if auto_show:
             plt.show()
     else:
-        plt.savefig(pathToSave)
+        plt.savefig(pathToSave, dpi=my_dp)
 
 
 def getResults(dataset_val, model, coco):
@@ -441,77 +442,5 @@ image = skimage.io.imread(cur_path)
     # Visualize results
     #r = results[0]
 r = model.detect([image], verbose=0)[0]
-#display_instances_my(image, r['rois'], r['masks'], r['class_ids'], dataset_val.class_names, r['scores'], pathToSave = '/home/brans/datasets/volvo/foo.png')
-    #"savefig('/home/brans/datasets/volvo/foo.png')
-
-TARG_THRESHOLD = 0.9
-classes = r['class_ids']
-scores = r['scores']
-shape = r['masks'].shape
-masks = r['masks'].reshape(shape[2],shape[0],shape[1])
-objectsCount = masks.shape[0]
-
-ma = np.where(masks)
-
-objecstMasks = []
-objectStats = []
-
-toothes = []
-botoms = []
-
-for obId in range(objectsCount):
-    objectStats.append(scores[obId] > TARG_THRESHOLD)
-    if(classes[obId] == 1):
-        toothes.append(obId)
-    elif(classes[obId] == 2):
-        botoms.append(obId)
-
-    curMasksIds = np.where(r['masks'][:, :, obId])
-    masksIdsLen = curMasksIds[0].shape[0]
-    objectMasks = []
-    for i in range(masksIdsLen):
-        objectMasks.append([curMasksIds[0][i], curMasksIds[1][i]])
-    objecstMasks.append(objectMasks)
-
-# coords = np.nonzero(masks[1])
-# coordsL = list(zip(list(coords[0]), list(coords[1])))
-from sympy import Point, Polygon, Point2D
-from sympy.geometry.util import centroid
-
-centroids = []
-
-if(len(toothes) < 2 or len(botoms) == 0):
-    print("Bad view point, try again")
-else:
-    for id in toothes:
-        toothMasc = objecstMasks[id]
-        points = []
-        # for pt in toothMasc:
-        #     points.append(Point2D(pt[0], pt[1]))
-
-        t = tuple(toothMasc)
-        p = Polygon(*t)
-        curCentroid = centroid(p)
-        centroids.append(curCentroid)
-
-toothDistances = []
-prevCentr = None
-
-maxId = []
-
-for centr in centroids:
-    if(prevCentr is not None):
-        dist = centr.distance(prevCentr)
-        toothDistances.append(prevCentr)
-
-    prevCentr = centr
-
-avgDist = np.mean(toothDistances)
-
-coordGood = []
-for x in range(shape[0]):
-    for y in range(shape[1]):
-        if(masks[2, x, y] == True):
-            print("OK")
-            break
-            coordGood.append([x, y])
+display_instances_my(image, r['rois'], r['masks'], r['class_ids'], dataset_val.class_names, r['scores'], pathToSave = '/home/brans/datasets/volvo/foo.png')
+  
