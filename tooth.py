@@ -201,6 +201,7 @@ def saveToFile(path, model):
     print('detected')
     display_instances_my(image, r['rois'], r['masks'], r['class_ids'], ['BG','Tooth','Bottom'], r['scores'], pathToSave = os.path.join(results_dir, 
     path.replace(".jpg",".png")))
+    model.clear_session()
     print('saved')
     
 
