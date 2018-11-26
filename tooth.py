@@ -217,83 +217,6 @@ class CocoDataset(utils.Dataset):
         return m
 
 
-############################################################
-#  COCO Evaluation
-############################################################
-
-def build_coco_results(dataset, image_ids, rois, class_ids, scores, masks):
-    """Arrange resutls to match COCO specs in http://cocodataset.org/#format
-    """
-    # If no results, return an empty list
-    if rois is None:
-        return []
-
-    results = []
-    for image_id in image_ids:
-        # Loop through detections
-        for i in range(rois.shape[0]):
-            class_id = class_ids[i]
-            score = scores[i]
-            bbox = np.around(rois[i], 1)
-            mask = masks[:, :, i]
-
-            result = {
-                "image_id": image_id,
-                "category_id": dataset.get_source_class_id(class_id, "coco"),
-                "bbox": [bbox[1], bbox[0], bbox[3] - bbox[1], bbox[2] - bbox[0]],
-                "score": score,
-                "segmentation": maskUtils.encode(np.asfortranarray(mask))
-            }
-            results.append(result)
-    return results
-
-
-def evaluate_coco(model, dataset, coco, eval_type="bbox", limit=0, image_ids=None):
-    """Runs official COCO evaluation.
-    dataset: A Dataset object with valiadtion data
-    eval_type: "bbox" or "segm" for bounding box or segmentation evaluation
-    limit: if not 0, it's the number of images to use for evaluation
-    """
-    limit = 2
-
-    image_ids = image_ids or dataset.image_ids
-
-    # Limit to a subset
-    if limit:
-        image_ids = image_ids[:limit]
-
-    # Get corresponding COCO image IDs.
-    coco_image_ids = [dataset.image_info[id]["id"] for id in image_ids]
-
-    t_prediction = 0
-    t_start = time.time()
-
-    results = []
-    for i, image_id in enumerate(image_ids):
-        print("Processing image ID: " + str(image_id))
-        # Load image
-        image = dataset.load_image(image_id)
-
-        # Run detection
-        t = time.time()
-        r = model.detect([image], verbose=0)[0]
-        t_prediction += (time.time() - t)
-
-        # Convert results to COCO format
-        # Cast masks to uint8 because COCO tools errors out on bool
-        # image_results = build_coco_results(dataset, coco_image_ids[i:i + 1],
-        #                                    r["rois"], r["class_ids"],
-        #                                    r["scores"],
-        #                                    r["masks"].astype(np.uint8))
-
-       # image_results = r['rois'], r['masks'], r['class_ids'], r['scores']
-
-        results.extend([coco_image_ids[i:i + 1], r])
-
-    print("Prediction time: {}. Average {}/image".format(
-        t_prediction, t_prediction / len(image_ids)))
-    print("Total time: ", time.time() - t_start)
-    return results
 
 
 def prepareDatasetAndModel():
@@ -316,11 +239,11 @@ def prepareDatasetAndModel():
     model.load_weights(model_path, by_name=True)
 
     # Validation dataset
-    dataset_val = CocoDataset()
+    #dataset_val = CocoDataset()
     #val_type = "minival"
     #coco = dataset_val.load_coco(dataset_path, val_type, year=2014, return_coco=True, auto_download=False)
     #dataset_val.prepare()
-    return dataset_val, model
+    return  model
 
 
 
@@ -344,6 +267,7 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
     colors: (optional) An array or colors to use with each object
     captions: (optional) A list of strings to use as captions for each object
     """
+    print('12')
     # Number of instances
     N = boxes.shape[0]
     if not N:
@@ -423,7 +347,7 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
 import skimage.io
 
 
-def saveToFile(path, model, dataset_val):
+def saveToFile(path, model):
     print('path',os.path.join(dataset_path, path))
     print('path2',os.path.join(results_dir, path.replace(".jpg",".png")))
     image = skimage.io.imread(os.path.join(dataset_path, path))
@@ -436,7 +360,7 @@ def saveToFile(path, model, dataset_val):
     
 
 
-dataset_val, model = prepareDatasetAndModel()
+ model = prepareDatasetAndModel()
 
 for i in range(0,40):
-    saveToFile('6vm2ni4joxayvjy.jpg', model, dataset_val)
+    saveToFile('6vm2ni4joxayvjy.jpg', model)
