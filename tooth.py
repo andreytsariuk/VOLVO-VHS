@@ -360,7 +360,7 @@ def saveToFile(path, model):
     
 
 
- model = prepareDatasetAndModel()
+model = prepareDatasetAndModel()
 
 for i in range(0,40):
     saveToFile('6vm2ni4joxayvjy.jpg', model)
