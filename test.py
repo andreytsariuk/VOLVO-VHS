@@ -333,7 +333,8 @@ def saveToFile(paths):
     print('detected')
     for i in range(0,len(res)):
         display_instances_my(images[i], res[i]['rois'], res[i]['masks'], res[i]['class_ids'], ['BG','Tooth','Bottom'], res[i]['scores'], pathToSave = os.path.join(results_dir, paths[i].replace(".jpg",".png")))
-    get_size(res[0])
+    res_1 =  get_size(res[0])
+    print(res_1)
     print('saved')
 
 
