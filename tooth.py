@@ -211,7 +211,7 @@ class foo ():
         self.model =  prepareDatasetAndModel()
 
             
-    def main_1():
+    def main_1(self):
         for i in range(0,40):
             saveToFile('6vm2ni4joxayvjy.jpg', self.model)
 
