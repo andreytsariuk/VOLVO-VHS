@@ -193,6 +193,11 @@ import skimage.io
 
 
 def saveToFile(path, model):
+    import tensorflow as tf
+    sess = tf.Session()
+
+    from keras import backend as K
+    K.set_session(sess)
     print('path',os.path.join(dataset_path, path))
     print('path2',os.path.join(results_dir, path.replace(".jpg",".png")))
     image = skimage.io.imread(os.path.join(dataset_path, path))
@@ -201,7 +206,7 @@ def saveToFile(path, model):
     print('detected')
     display_instances_my(image, r['rois'], r['masks'], r['class_ids'], ['BG','Tooth','Bottom'], r['scores'], pathToSave = os.path.join(results_dir, 
     path.replace(".jpg",".png")))
-    model.keras_model.clear_session()
+    K.clear_session()
     print('saved')
     
 
