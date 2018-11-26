@@ -207,7 +207,7 @@ def saveToFile(path, model):
 
 
 class foo ():
-    __init__(self):
+    def __init__(self):
         self.model =  prepareDatasetAndModel()
 
             
