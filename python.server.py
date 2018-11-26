@@ -25,7 +25,7 @@ class MyHandler(BaseHTTPRequestHandler):
         print('Append for Parse', post_body['image'])
 
         print('FOOOOO POST', post_body['image'])
-        saveToFile([post_body['image']], model)
+        saveToFile([post_body['image']])
         print('FOOOOO POST DONE')
         # live queue
 
