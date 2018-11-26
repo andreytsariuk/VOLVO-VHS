@@ -210,4 +210,4 @@ def saveToFile(paths):
 
 
 for i in range(0,40):
-    saveToFile(['6vm2ni4joxayvjy.jpg', '6vm2ni4joxayvjy.jpg', '6vm2ni4joxayvjy.jpg', '6vm2ni4joxayvjy.jpg'])
+    saveToFile(['6vm2ni4joxayvjy.jpg', '6vm2ni4joxayvjy.jpg'])
