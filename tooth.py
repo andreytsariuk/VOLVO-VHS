@@ -3,7 +3,7 @@ import sys
 import time
 import numpy as np
 import imgaug  # https://github.com/aleju/imgaug (pip3 install imgaug)
-import datetime
+
 # Download and install the Python COCO tools from https://github.com/waleedka/coco
 # That's a fork from the original https://github.com/pdollar/coco with a bug
 # fix for Python 3.
@@ -191,23 +191,6 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
 		
 import skimage.io
 
-def color_splash(image, mask):
-    """Apply color splash effect.
-    image: RGB image [height, width, 3]
-    mask: instance segmentation mask [height, width, instance count]
-    Returns result image.
-    """
-    # Make a grayscale copy of the image. The grayscale copy still
-    # has 3 RGB channels, though.
-    gray = skimage.color.gray2rgb(skimage.color.rgb2gray(image)) * 255
-    # Copy color pixels from the original color image where mask is set
-    if mask.shape[-1] > 0:
-        # We're treating all instances as one, so collapse the mask into one layer
-        mask = (np.sum(mask, -1, keepdims=True) >= 1)
-        splash = np.where(mask, image, gray).astype(np.uint8)
-    else:
-        splash = gray.astype(np.uint8)
-    return splash
 
 def saveToFile(path, model):
 
@@ -217,18 +200,22 @@ def saveToFile(path, model):
     print('model',model)
     r = model.detect([image], verbose=1)[0]
     print('detected')
-    # display_instances_my(image, r['rois'], r['masks'], r['class_ids'], ['BG','Tooth','Bottom'], r['scores'], pathToSave = os.path.join(results_dir, 
-    # path.replace(".jpg",".png")))
-    # Color splash
-    splash = color_splash(image, r['masks'])
-    # Save output
-    file_name = "splash_{:%Y%m%dT%H%M%S}.png".format(datetime.datetime.now())
-    skimage.io.imsave(file_name, splash)
+    display_instances_my(image, r['rois'], r['masks'], r['class_ids'], ['BG','Tooth','Bottom'], r['scores'], pathToSave = os.path.join(results_dir, 
+    path.replace(".jpg",".png")))
     print('saved')
     
 
 
-model = prepareDatasetAndModel()
+class foo ():
 
-for i in range(0,40):
-    saveToFile('6vm2ni4joxayvjy.jpg', model)
+    def init():
+            self.model =  prepareDatasetAndModel()
+    def main_1():
+        for i in range(0,40):
+            saveToFile('6vm2ni4joxayvjy.jpg', self.model)
+
+
+ma = foo()
+
+foo.init()
+foo.main_1()
