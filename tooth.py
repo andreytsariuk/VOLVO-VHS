@@ -202,8 +202,8 @@ def saveToFile(paths):
 
     res = model.detect(images, verbose=1)
     print('detected')
-    for i in range(0,len(res)):
-        display_instances_my(images[i], res[i]['rois'], res[i]['masks'], res[i]['class_ids'], ['BG','Tooth','Bottom'], res[i]['scores'], pathToSave = os.path.join(results_dir, path[i].replace(".jpg",".png")))
+    # for i in range(0,len(res)):
+    #     display_instances_my(images[i], res[i]['rois'], res[i]['masks'], res[i]['class_ids'], ['BG','Tooth','Bottom'], res[i]['scores'], pathToSave = os.path.join(results_dir, path[i].replace(".jpg",".png")))
     print('saved')
     
 
