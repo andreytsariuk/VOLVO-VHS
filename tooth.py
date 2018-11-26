@@ -203,7 +203,6 @@ def saveToFile(path):
     print('detected')
     display_instances_my(image, r['rois'], r['masks'], r['class_ids'], ['BG','Tooth','Bottom'], r['scores'], pathToSave = os.path.join(results_dir, 
     path.replace(".jpg",".png")))
-    K.clear_session()
     print('saved')
     
 
