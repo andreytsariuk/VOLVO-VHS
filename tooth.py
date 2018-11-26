@@ -194,8 +194,8 @@ import skimage.io
 def saveToFile(paths):
     model = prepareDatasetAndModel()
 
-    print('path',os.path.join(dataset_path, path))
-    print('path2',os.path.join(results_dir, path.replace(".jpg",".png")))
+    print('start')
+   
     images =[]
     for path in paths:
         images.append(skimage.io.imread(os.path.join(dataset_path, path)))
