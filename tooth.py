@@ -196,7 +196,7 @@ def saveToFile(path, model):
     print('path',os.path.join(dataset_path, path))
     print('path2',os.path.join(results_dir, path.replace(".jpg",".png")))
     image = skimage.io.imread(os.path.join(dataset_path, path))
-    
+    print('model',model)
     r = model.detect([image], verbose=1)[0]
     print('detected')
     display_instances_my(image, r['rois'], r['masks'], r['class_ids'], ['BG','Tooth','Bottom'], r['scores'], pathToSave = os.path.join(results_dir, 
