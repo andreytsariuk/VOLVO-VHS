@@ -23,13 +23,11 @@ class MyHandler(BaseHTTPRequestHandler):
         post_data = self.rfile.read(content_length)
         post_body = json.loads(post_data.decode('utf-8'))
         print('Append for Parse', post_body['image'])
-        print('QUEUe LEN', len(queue))
 
         print('FOOOOO POST', post_body['image'])
         saveToFile([post_body['image']], model)
         print('FOOOOO POST DONE')
         # live queue
-        queue.remove(post_body['image'])
 
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
