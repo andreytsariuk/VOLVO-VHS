@@ -113,7 +113,7 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
     print('12')
     # Number of instances
     N = boxes.shape[0]
-    my_dpi = 96
+    my_dpi = 76
     if not N:
         print("\n*** No instances to display *** \n")
     else:
