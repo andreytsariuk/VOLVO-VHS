@@ -207,6 +207,3 @@ def saveToFile(paths):
     print('saved')
     
 
-
-for i in range(0,40):
-    saveToFile(['6vm2ni4joxayvjy.jpg'])
