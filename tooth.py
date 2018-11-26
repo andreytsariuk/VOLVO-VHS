@@ -217,4 +217,4 @@ class foo:
 
 ma = foo()
 
-foo.main_1()
+foo.main_1(ma)
