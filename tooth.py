@@ -212,6 +212,7 @@ class foo:
     def main_1(self):
         for i in range(0,40):
             saveToFile('6vm2ni4joxayvjy.jpg', self.model)
+            time.sleep(1)
 
 
 ma = foo()
