@@ -15,7 +15,6 @@ from pycocotools.cocoeval import COCOeval
 from pycocotools import mask as maskUtils
 
 import zipfile
-import urllib.request
 import shutil
 
 # Root directory of the project
