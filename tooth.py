@@ -74,8 +74,7 @@ def prepareDatasetAndModel():
     config = CocoConfig()
     config.display()
 
-    model = modellib.MaskRCNN(mode="inference", config=config,
-                              model_dir=DEFAULT_LOGS_DIR)
+    model = modellib.MaskRCNN(mode="inference", config=config, model_dir=DEFAULT_LOGS_DIR)
     # model_path = model.get_imagenet_weights()
 
     # Load weights
