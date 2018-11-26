@@ -186,7 +186,7 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
             plt.show()
     else:
         print('3')
-        plt.savefig(pathToSave, dpi=my_dp)
+        plt.savefig(pathToSave, dpi=my_dpi)
         plt.close()
 		
 import skimage.io
