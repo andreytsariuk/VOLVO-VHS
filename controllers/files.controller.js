@@ -30,14 +30,31 @@ module.exports = class {
         let newFileName = `${uniqid()}.${format}`;
         return new Promise
             .fromCallback(cb => sampleFile.mv(`public/images/tooths/${newFileName}`, cb))
-            .then(() => axios.post('http://localhost:9000/recognize', {
-                image: newFileName
+            .then(() => new Promise((resolve, reject) => {
+                console.log(newFileName)
+
+                const pythonProcess = spawn('python3', ["test.py", newFileName]);
+
+                pythonProcess.stdout.on('data', (data) => {
+                    console.log(`stdout: ${data}`) 
+                });
+
+                pythonProcess.stderr.on('data', (data) => {
+                    console.log(`stderr: ${data}`);
+                    if (data.indexOf('error') !== -1)
+                        return reject(data);
+                });
+
+                pythonProcess.on('close', (code) => {
+                    console.log(`child process exited with code ${code}`);
+                    return resolve(fs.readFileSync(`public/images/tooths_result/${newFileName.replace('.jpg','.png')}`));
+                });
             }))
-            .then(() => res.send({
-                image: fs.readFileSync(`public/images/tooths_result/${newFileName.replace('.jpg', '.png')}`)
+            .then(newImage=>res.send({
+                image:newImage
             }))
-            .catch(err => {
-                console.log('Err', err);
+            .catch(err=>{
+                console.log('Err',err);
                 res.send(err);
             });
 
