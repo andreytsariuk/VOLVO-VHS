@@ -192,6 +192,134 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
 import skimage.io
 
 
+
+    
+
+
+
+
+
+def get_size(r):
+    TARG_THRESHOLD = 0.9
+    classes = r['class_ids']
+    scores = r['scores']
+    shape = r['masks'].shape
+    masks = r['masks'].reshape(shape[2],shape[0],shape[1])
+    objectsCount = masks.shape[0]
+    
+    ma = np.where(masks)
+    
+    objecstMasks = []
+    objectStats = []
+    
+    toothes = []
+    botoms = []
+    
+    for obId in range(objectsCount):
+        objectStats.append(scores[obId] > TARG_THRESHOLD)
+        if(classes[obId] == 1):
+            toothes.append(obId)
+        elif(classes[obId] == 2):
+            botoms.append(obId)
+    
+        curMasksIds = np.where(r['masks'][:, :, obId])
+        masksIdsLen = curMasksIds[0].shape[0]
+        objectMasks = []
+        for i in range(masksIdsLen):
+            objectMasks.append([curMasksIds[0][i], curMasksIds[1][i]])
+        objecstMasks.append(objectMasks)
+    
+    # coords = np.nonzero(masks[1])
+    # coordsL = list(zip(list(coords[0]), list(coords[1])))
+    from sympy import Point, Polygon, Point2D
+    from sympy.geometry.util import centroid
+    from scipy.spatial import ConvexHull
+    
+    centroids = []
+    toothHights = []
+    bottomWidths = []
+    
+    if(len(toothes) < 2 or len(botoms) == 0):
+        print("Bad view point, try again")
+    else:
+        for id in toothes:
+            if(objectStats[id]):
+                msk = np.array(objecstMasks[id])
+                # maxX = msk[:, 0].max()
+                # minX = msk[:, 0].min()
+    
+                maxY = msk[:, 1].max()
+                minY = msk[:, 1].min()
+                toothHight = maxY - minY
+                toothHights.append(toothHight)
+    
+                toothMasc = objecstMasks[id]
+                import random
+    
+                toothMasc = random.sample(toothMasc, int(len(toothMasc)/ 15))
+                #points = []
+                # for pt in toothMasc:
+                #     points.append(Point2D(pt[0], pt[1]))
+                from sympy.geometry.util import convex_hull
+                t = tuple(toothMasc)
+               # hull = ConvexHull(t)
+                #p = Polygon(*hull.simplices)
+                p = Polygon(*t)
+                curCentroid = centroid(p)
+                centroids.append(curCentroid)
+    
+        for id in botoms:
+            if (objectStats[id]):
+    
+                toothMasc = objecstMasks[id]
+                toothMasc = random.sample(toothMasc, int(len(toothMasc)/ 15))
+                t = tuple(toothMasc)
+                hull = ConvexHull(t)
+                #p = Polygon(*hull.simplices)
+                p = Polygon(*t)
+                curCentroid = centroid(p)
+    
+                sumOfDist = 0
+                pl = convex_hull(p)
+                for simplex in pl.args:
+                    curPt = Point2D(simplex)
+    
+                    sumOfDist += 2 * abs(curPt[1] - curCentroid[1])
+                    # size = 2 * sum(abs(p - center) for p in convexhullpoints) / len(convexhullpoints)
+    
+                bottomWidth = sumOfDist / len(hull.simplices)
+                bottomWidths.append(float(bottomWidth))
+    
+        toothDistances = []
+        prevCentr = None
+    
+        maxId = []
+    
+        for centr in centroids:
+            if(prevCentr is not None):
+                dist = abs(centr[0] - prevCentr[0])
+                toothDistances.append(float(dist))
+    
+            prevCentr = centr
+    
+    
+        avgToothDist = np.mean(toothDistances)
+        avgToothHigh = np.mean(toothHights)
+        meanBottomWidth = np.mean(bottomWidths)
+        REAL_DIST_BETWEEN_TOOTH = 72
+        mmPerPixel = avgToothDist / REAL_DIST_BETWEEN_TOOTH
+        realToothHigth = avgToothHigh / mmPerPixel
+        REAL_BOTTOM_H = 10
+        mmPerPixel = meanBottomWidth / REAL_BOTTOM_H
+        realToothHigth2 = avgToothHigh / mmPerPixel
+        #resultH = (realToothHigth + realToothHigth2)
+        resultH = realToothHigth
+        return resultH
+
+
+
+
+
 def saveToFile(paths):
     model = prepareDatasetAndModel()
 
@@ -205,8 +333,11 @@ def saveToFile(paths):
     print('detected')
     for i in range(0,len(res)):
         display_instances_my(images[i], res[i]['rois'], res[i]['masks'], res[i]['class_ids'], ['BG','Tooth','Bottom'], res[i]['scores'], pathToSave = os.path.join(results_dir, paths[i].replace(".jpg",".png")))
+    get_size(res[0])
     print('saved')
-    
+
+
+
 
 
 saveToFile([sys.argv[1]])
