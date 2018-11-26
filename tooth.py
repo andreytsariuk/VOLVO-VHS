@@ -54,10 +54,10 @@ class CocoConfig(Config):
 
     # We use a GPU with 12GB memory, which can fit two images.
     # Adjust down if you use a smaller GPU.
-    IMAGES_PER_GPU = 1
+    IMAGES_PER_GPU = 2
 
     # Uncomment to train on 8 GPUs (default is 1)
-    # GPU_COUNT = 8
+    GPU_COUNT = 2
 
     # Number of classes (including background)
     NUM_CLASSES = 1 + 2  # COCO has 80 classes
@@ -192,21 +192,23 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
 import skimage.io
 
 
-def saveToFile(path):
+def saveToFile([paths]):
     model = prepareDatasetAndModel()
 
     print('path',os.path.join(dataset_path, path))
     print('path2',os.path.join(results_dir, path.replace(".jpg",".png")))
-    image = skimage.io.imread(os.path.join(dataset_path, path))
-    print('model',model)
-    r = model.detect([image], verbose=1)[0]
+    images =[]
+    for path in paths:
+        images.append(skimage.io.imread(os.path.join(dataset_path, path)))
+
+    res = model.detect(images, verbose=1)
     print('detected')
-    display_instances_my(image, r['rois'], r['masks'], r['class_ids'], ['BG','Tooth','Bottom'], r['scores'], pathToSave = os.path.join(results_dir, 
-    path.replace(".jpg",".png")))
+    for i in range(0,len(res)):
+        display_instances_my(images[i], r[i]['rois'], r[i]['masks'], r[i]['class_ids'], ['BG','Tooth','Bottom'], r[i]['scores'], pathToSave = os.path.join(results_dir, path[i].replace(".jpg",".png")))
     print('saved')
     
 
 
 
 for i in range(0,40):
-    saveToFile('6vm2ni4joxayvjy.jpg')
+    saveToFile(['6vm2ni4joxayvjy.jpg', '6vm2ni4joxayvjy.jpg', '6vm2ni4joxayvjy.jpg', '6vm2ni4joxayvjy.jpg'])
