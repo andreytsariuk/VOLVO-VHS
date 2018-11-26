@@ -113,6 +113,7 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
     print('12')
     # Number of instances
     N = boxes.shape[0]
+    my_dpi = 96
     if not N:
         print("\n*** No instances to display *** \n")
     else:
@@ -121,7 +122,7 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
     # If no axis is passed, create one and automatically call show()
     auto_show = False
     if not ax:
-        _, ax = plt.subplots(1, figsize=figsize)
+        _, ax = plt.subplots(1, figsize=(1024/my_dpi, 1024/my_dpi), dpi=my_dpi))
         auto_show = False
 
     # Generate random colors
@@ -185,7 +186,7 @@ def display_instances_my(image, boxes, masks, class_ids, class_names,
             plt.show()
     else:
         print('3')
-        plt.savefig(pathToSave)
+        plt.savefig(pathToSave, dpi=my_dp)
         plt.close()
 		
 import skimage.io
